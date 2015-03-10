@@ -38,7 +38,7 @@ class Entity(object):
 
 class Route(db.Model, Entity):
   __tablename__ = 'routes'
-  route_id = db.Column(db.Integer, primary_key=True)
+  route_id = db.Column(db.String(50), primary_key=True)
   agency_id = db.Column(db.String(50))
   route_short_name = db.Column(db.String(50))
   route_long_name = db.Column(db.String(150))
@@ -87,7 +87,7 @@ class Calendar(db.Model, Entity):
 class Trip(db.Model, Entity):
   __tablename__ = 'trips'
   trip_id = db.Column(db.String(50), primary_key=True)
-  route_id = db.Column(db.Integer, db.ForeignKey("routes.route_id"))
+  route_id = db.Column(db.String(50), db.ForeignKey("routes.route_id"))
   service_id = db.Column(db.String(50), db.ForeignKey("calendar.service_id"))
   trip_headsign = db.Column(db.String(150))
   trip_short_name = db.Column(db.String(150))
@@ -138,7 +138,7 @@ class RouteFrequency(db.Model, Entity):
   service_id = db.Column(db.String(50), primary_key=True)
   start_time = db.Column(db.String(50), primary_key=True)
   end_time = db.Column(db.String(50), primary_key=True)
-  headway_secs = db.Column(db.Integer)
+  headway_secs = db.Column(db.String(50))
 
 
 class Shape(db.Model, Entity):
@@ -152,23 +152,22 @@ class Shape(db.Model, Entity):
 
 class Stop(db.Model, Entity):
   __tablename__ = 'stops'
-  # stop_id = Column(Integer, Sequence('id_seq'), primary_key=True)
-  stop_id = db.Column(db.Integer, primary_key=True)
+  stop_id = db.Column(db.String(50), primary_key=True)
   stop_code = db.Column(db.String(50))
-  stop_desc = db.Column(db.String(50))
+  stop_desc = db.Column(db.String(250))
   stop_name = db.Column(db.String(250))
   stop_lat = db.Column(db.Float(precision=53))
   stop_lon = db.Column(db.Float(precision=53))
-  stop_calle = db.Column(db.String(50))
+  stop_calle = db.Column(db.String(250))
   stop_numero = db.Column(db.String(50))
-  stop_entre = db.Column(db.String(50))
-  stop_esquina = db.Column(db.String(50))
+  stop_entre = db.Column(db.String(250))
+  stop_esquina = db.Column(db.String(250))
 
 
 class StopSeq(db.Model, Entity):
   __tablename__ = 'stop_seq'
   trip_id = db.Column(db.String(50), primary_key=True)
-  stop_id = db.Column(db.Integer, primary_key=True)
+  stop_id = db.Column(db.String(50), primary_key=True)
   stop_sequence = db.Column(db.Integer, primary_key=True) 
   stop_time = db.Column(db.String(50)) 
   shape_dist_traveled = db.Column(db.Float(precision=53))
@@ -177,7 +176,7 @@ class StopSeq(db.Model, Entity):
 class StopTime(db.Model, Entity):
   __tablename__ = 'stop_times'
   trip_id = db.Column(db.String(50), primary_key=True)
-  stop_id = db.Column(db.Integer, primary_key=True)
+  stop_id = db.Column(db.String(50), primary_key=True)
   stop_sequence = db.Column(db.Integer, primary_key=True)
   arrival_time = db.Column(db.String(50))
   departure_time = db.Column(db.String(50))
