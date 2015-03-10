@@ -87,8 +87,8 @@ class Calendar(db.Model, Entity):
 class Trip(db.Model, Entity):
   __tablename__ = 'trips'
   trip_id = db.Column(db.String(50), primary_key=True)
-  route_id = db.Column(db.String(50), db.ForeignKey("routes.route_id"))
-  service_id = db.Column(db.String(50), db.ForeignKey("calendar.service_id"))
+  route_id = db.Column(db.String(50), db.ForeignKey("routes.route_id", onupdate="CASCADE"))
+  service_id = db.Column(db.String(50))
   trip_headsign = db.Column(db.String(150))
   trip_short_name = db.Column(db.String(150))
   direction_id = db.Column(db.String(50))
@@ -125,7 +125,7 @@ class FareRule(db.Model, Entity):
 
 class Frequency(db.Model, Entity):
   __tablename__ = 'frequencies'
-  trip_id = db.Column(db.String(50), db.ForeignKey("trips.trip_id"), primary_key=True)
+  trip_id = db.Column(db.String(50), db.ForeignKey("trips.trip_id", onupdate="CASCADE"), primary_key=True)
   start_time = db.Column(db.String(50))
   end_time = db.Column(db.String(50))
   headway_secs = db.Column(db.String(50))
@@ -134,7 +134,7 @@ class Frequency(db.Model, Entity):
 
 class RouteFrequency(db.Model, Entity):
   __tablename__ = 'route_frequencies'
-  route_id = db.Column(db.String(50), primary_key=True)
+  route_id = db.Column(db.String(50), db.ForeignKey("routes.route_id", onupdate="CASCADE"), primary_key=True)
   service_id = db.Column(db.String(50), primary_key=True)
   start_time = db.Column(db.String(50), primary_key=True)
   end_time = db.Column(db.String(50), primary_key=True)
@@ -166,7 +166,7 @@ class Stop(db.Model, Entity):
 
 class StopSeq(db.Model, Entity):
   __tablename__ = 'stop_seq'
-  trip_id = db.Column(db.String(50), primary_key=True)
+  trip_id = db.Column(db.String(50), db.ForeignKey("trips.trip_id", onupdate="CASCADE"), primary_key=True)
   stop_id = db.Column(db.String(50), primary_key=True)
   stop_sequence = db.Column(db.Integer, primary_key=True) 
   stop_time = db.Column(db.String(50)) 
@@ -175,7 +175,7 @@ class StopSeq(db.Model, Entity):
 
 class StopTime(db.Model, Entity):
   __tablename__ = 'stop_times'
-  trip_id = db.Column(db.String(50), primary_key=True)
+  trip_id = db.Column(db.String(50), db.ForeignKey("trips.trip_id", onupdate="CASCADE"), primary_key=True)
   stop_id = db.Column(db.String(50), primary_key=True)
   stop_sequence = db.Column(db.Integer, primary_key=True)
   arrival_time = db.Column(db.String(50))
@@ -192,7 +192,7 @@ class Transfer(db.Model, Entity):
 
 class TripStartTime(db.Model, Entity):
   __tablename__ = 'trips_start_times'
-  trip_id = db.Column(db.String(50), primary_key=True)
+  trip_id = db.Column(db.String(50), db.ForeignKey("trips.trip_id", onupdate="CASCADE"), primary_key=True)
   service_id = db.Column(db.String(50), primary_key=True)
   start_time = db.Column(db.String(50), primary_key=True)
 
