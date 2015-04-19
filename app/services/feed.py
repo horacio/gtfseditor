@@ -112,7 +112,15 @@ class Feed(object):
       route.agency_id = row.agency_id
       route.route_color = row.route_color
       route.route_text_color = row.route_text_color
-      self.loadTrips(route)
+
+      logger.info('build_type %s', row.build_type)
+      if row.build_type == 'initial-times':
+        self.loadTrips(route)
+      elif row.build_type == 'frequency':
+        self.loadTrips(route)
+      else:
+        self.loadTrips(route)
+        # raise NotImplementedError
 
   def loadTrips(self, route):
     """Loads active trips into schedule"""
