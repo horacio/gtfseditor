@@ -148,7 +148,8 @@ class Feed(object):
           order_by(StopSeq.stop_sequence).all()
 
         for startTimeRow in trip_start_times:
-          new_trip_id = '.'.join([str(tripRow.trip_id), str(startTimeRow.service_id), startTimeRow.start_time])
+          new_trip_id = '.'.join([str(route.route_short_name), str(tripRow.card_code), str(tripRow.trip_id), 
+            str(startTimeRow.service_id), startTimeRow.start_time])
           trip = route.AddTrip(trip_id = new_trip_id, headsign=tripRow.trip_headsign)
           trip.service_id = startTimeRow.service_id
           trip.shape_id = tripRow.shape_id
@@ -220,12 +221,11 @@ class Feed(object):
         trip_start_times = self.trip_start_times_default
 
       for stop_time in StopTimesFactory.offsetStartTimes(seq_trip_id, stop_sequence, startTimeRow):
-        stopTime = StopTime(**stop_time)
-        stop = self.schedule.GetStop(str(stopTime.stop_id))
-        stop_time = stopTime.arrival_time
-        if stop_time:
+        stop = self.schedule.GetStop(str(stop_time['stop_id']))
+        arrival_time = stop_time['arrival_time']
+        if arrival_time:
           try:
-            trip.AddStopTime(stop, stop_time=stop_time)
+            trip.AddStopTime(stop, stop_time=arrival_time)
           except Exception, e:
             trip.AddStopTime(stop)
             logger.error(e)
