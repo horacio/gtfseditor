@@ -5,6 +5,7 @@ from flask import current_app
 from . import db
 
 from flask.ext.login import UserMixin
+from flask.ext.login import AnonymousUserMixin
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from datetime import datetime
@@ -289,6 +290,18 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.email)
+
+
+
+class AnonymousUser(AnonymousUserMixin):
+    def can(self, permissions):
+        return False
+
+    def is_administrator(self):
+        return False
+
+
+login_manager.anonymous_user = AnonymousUser
 
 
 @login_manager.user_loader
